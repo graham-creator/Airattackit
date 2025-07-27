@@ -4,9 +4,9 @@ Automated Wireless Attack Framework<br/>
 # it Contains
 Some Of Pre-installed Wireless Attack tools<br/>
 <h3>Why We Need This?</h3><br/>
-<p>Writing Comands On Terminal Is To Boring and Hard For New Users.With This Tool U Dont Need To Write Command or Remember Command it is Fully Automated.More Tools Will Be Adede Soon.<br/></p>
+<p>Writing Comands On Terminal Is Interesting and Time-Consuming At The Same Time For New Users.But There Is Another Way,A Faster Way.it is Fully Automated btw.More Tools Will Be Added Soon Just Working On It.<br/></p>
 <h4>How To Use it?<br/></h4>
-<p><code>git clone https://github.com/JoyGhoshs/Airattackit/</code><br/>
+<p><code>git clone https://github.com/graham-creator/Airattackit/</code><br/>
   <code>cd Airattackit</code><br/>
   <code>chmod +x install.sh</code><br/>
   <code>./install.sh</code><br/>
