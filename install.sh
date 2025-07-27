@@ -1,6 +1,6 @@
 #!/bin/bash
 #installing In Bin
-#By JoyGhosh<Joychondroghosh@gmail.com>
+#By Amn3sia / from JoyGhosh>
 echo 'Installing Airattackit...'
 clear
 echo  """
