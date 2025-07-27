@@ -12,6 +12,6 @@ Some Of Pre-installed Wireless Attack tools<br/>
   <code>./install.sh</code><br/>
   <b>Type airattack in Terminal</b><br/>
   <code>airattack</code><br/>
-  <code>Input r to install Extra Tools<br/></code>
+  <code>Input r to install Extra Tools</code><br/>
   <b>Tool Is Ready To Use</b>
 </p>
